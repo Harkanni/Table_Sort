@@ -2,11 +2,11 @@
 A table sorting and filtering application written in HTML, CSS and JavaScript.
 ##  Features
 
-      ```Sort data by columns in ascending or descending order
+      ```Sort data by columns in ascending or descending order```
       
       Filter data by gender
       
-      Responsive design```
+      Responsive design
 
 ##  Usage
 
