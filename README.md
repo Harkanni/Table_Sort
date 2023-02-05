@@ -2,14 +2,18 @@
 A table sorting and filtering application written in HTML, CSS and JavaScript.
 ##  Features
 
-      Sort data by columns in ascending or descending order
+      ```Sort data by columns in ascending or descending order
+      
       Filter data by gender
-      Responsive design
+      
+      Responsive design```
 
 ##  Usage
 
       Clone the repository or download the ZIP file to your local machine.
+      
       Open the index.html file in your browser to view the application.
+      
       Sort and filter data by using the buttons provided.
 
 ##  Requirements
