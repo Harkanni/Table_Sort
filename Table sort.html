@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Table sort</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<style type="text/css">	
+		
+	input[type=radio] {
+		cursor: pointer;
+	}
+	.content-table {
+	  min-width: 480px;
+	  border-collapse: collapse;
+	  margin: 10px 0;
+	  font-size: 0.9em;
+		border-radius: 5px 5px 0 0 !important;
+		overflow: hidden;
+		box-shadow: 0 0 20px rgba(0,0,0,.15)
+	}
+	.content-table thead tr {
+	  background-color: #009879;
+	  color: #fff;
+	  text-align: left;
+	  font-weight: bold;
+	}
+	.content-table th, .content-table td {
+	  padding: 12px 15px
+	}
+	.content-table tbody tr {
+	  border-bottom: 1px solid #ddd
+	}
+	.content-table tbody tr.active-row {
+		font-weight: bold;
+		color: #009879
+	}
+	.content-table tbody tr td:first-of-type {
+		text-align: center;
+	}
+	.content-table tbody tr:nth-of-type(even){
+	  background-color: #f3f3f3 !important;
+	}
+	.content-table tbody tr:last-of-type {
+	  border-bottom: 3px solid #009879
+	}
+	.content-table thead tr th:hover {
+		background-color: #007069;
+		cursor: pointer
+	}
+	.content-table thead tr th:not(.active) i{
+		display: none !important;
+	}
+	.content-table thead tr th:not(.active):hover i{
+		display: inline !important;
+	}
+
+
+</style>
+<body>
+	<div>
+		<label for="Gender">All</label>
+		<input type="radio" name="Gender" id="Gender" value="Male" onclick="TableObject.refreshTable()">
+		<label for="Gender">Female</label>
+		<input type="radio" name="Gender" id="Gender" value="Female" onclick="TableObject.filterTable('Female')">
+
+		<label for="Gender">Male</label>
+		<input type="radio" name="Gender" id="Gender" value="Male" onclick="TableObject.filterTable('Male')">		
+	</div>
+	<table class="content-table">
+		<thead>
+			<tr>
+				<th class="active rank_header" id="header" onclick="sort('rank', 'rank_header')">Rank
+					<i id="sort_icon" class="active_icon fas fa-sort-amount-down-alt" style="margin-left: 10px"></i>
+				</th>
+				<th onclick="sort('name', 'name_header')" id="header" class="name_header">Name 
+					<i id="sort_icon" class="fas fa-sort-amount-down-alt" style="margin-left: 10px"></i>
+				</th>
+				<th onclick="sort('gender', 'gender_header')" id="header" class="gender_header">Gender
+					<i id="sort_icon"  class="fas fa-sort-amount-down-alt" style="margin-left: 10px"></i>
+				</th>
+				<th onclick="sort('points', 'points_header')" id="header" class="points_header">Points
+					<i id="sort_icon"  class="fas fa-sort-amount-down-alt" style="margin-left: 10px"></i>
+				</th>
+				<th onclick="sort('teams', 'teams_header')" id="header" class="teams_header">Teams
+					<i id="sort_icon" class="fas fa-sort-amount-down-alt" style="margin-left: 10px"></i>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</body>
+</html>
+
+<script type="text/javascript">
+	var table = document.querySelector(".content-table");
+	var tableBody = document.querySelector("tbody");
+
+	var TableData = [
+	  { 
+	    rank: 1,
+	    name: "Sherlock",
+	    gender: "Female",
+	    points: "88,120",
+	    teams: "Puzzles"
+	  },
+	  { 
+	    rank: 2,
+	    name: "Emmanuella",
+	    gender: "Female",
+	    points: "88,10",
+	    teams: "Gamer"
+	  },
+	  { 
+	    rank: 3,
+	    name: "Akanni",
+	    gender: "Male",
+	    points: "88,1100",
+	    teams: "decoder"
+	  },
+	  { 
+	    rank: 4,
+	    name: "Domenic",
+	    gender: "Male",
+	    points: "88,110",
+	    teams: "Decode"
+	  },
+	  { 
+	    rank: 5,
+	    name: "Sally",
+	    gender: "Female",
+	    points: "72,400",
+	    teams: "Students"
+	  },
+	  { 
+	    rank: 6,
+	    name: "Nick",
+	    gender: "Male",
+	    points: "52,300",
+	    teams: "Decode"
+	  }
+	]
+
+	var TableObject = {
+	  asc: true,
+	  desc: false,
+	  refreshTable: function(data=TableData){
+	  	// THIS METHOD REFRESHES THE TABLE AFTER MODIFICATION IS DONE
+	    tableBody.innerHTML = ""
+	    data.forEach((tableEntry) => {
+	      var tr = document.createElement("tr")
+	      var tdata = Object.values(tableEntry)
+	      tdata.forEach((entry) => {
+	        var td = document.createElement("td")
+	        td.innerHTML = entry
+	        tr.appendChild(td)
+	      })
+	      tableBody.appendChild(tr)  
+	    })
+	  },
+	  
+	  filterTable: function(gender="Male"){
+	  	// THIS METHOD FILTERS THE TABLE BY GENDER
+	    var test = TableData.filter((data)=> data.gender === gender)
+	    this.refreshTable(test)
+	  },
+	  
+    sort_table: async function(sort_param){
+    	TableData.sort((a, b) => {
+          if(b[sort_param] < a[sort_param]) return 1;
+          else if(b[sort_param] > a[sort_param]) return -1
+          return 0
+        })
+      return TableData
+	},
+    
+    reverse_sort: async function(sort_param){
+        TableData.sort((a, b) => {
+          if(b[sort_param] > a[sort_param]) return 1;
+          else if(b[sort_param] < a[sort_param]) return -1
+          return 0
+        })
+        return TableData
+    },
+    
+    sort_asc: function(sort_param){
+      this.sort_table(sort_param).then((res) => {
+        let icon = document.querySelector("#sort_icon")
+        icon.className = "fas fa-sort-amount-down-alt"
+      }).then(() => TableObject.refreshTable())
+    },
+    
+    sort_desc: function(sort_param) {
+      this.reverse_sort(sort_param).then((res) => {
+          let icon = document.querySelector("#sort_icon")
+          icon.className = "fas fa-sort-amount-up"
+          console.log()
+      	}).then(() => {
+        	TableObject.refreshTable()
+      })
+    }
+}
+	
+	var table_header = document.querySelectorAll("#header")
+	
+
+	function sort(sort_param, id){
+		// REMOVE ADD ACTIVE CLASS 
+		table_header.forEach((header) => {
+			header.classList.remove("active")
+			header.childNodes[1].removeAttribute("id")
+		})
+		var active_header = document.querySelector(`.${id}`)
+		active_header.classList.add("active")
+		active_header.childNodes[1].setAttribute("id", "sort_icon")
+
+
+		if(TableObject.asc) {
+			TableObject.sort_asc(sort_param)
+			console.log("sorted in asc", sort_param, TableData)
+		} else {
+			TableObject.sort_desc(sort_param)
+			console.log("sorted in desc", sort_param, TableData)
+		}
+
+
+		TableObject.asc = !TableObject.asc
+		TableObject.desc = !TableObject.desc
+	}
+	
+//
+
+
+
+
+
+</script>
