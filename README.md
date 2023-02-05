@@ -1,7 +1,7 @@
 # Table Sorter and Filter
 A table sorting and filtering application written in HTML, CSS and JavaScript.
 
-![alt text](http://url/to/img.png)
+![Table preview](https://github.com/Harkanni/Table_Sort/blob/main/Table_Sort_Preview.png)
 
 ##  Features
 
